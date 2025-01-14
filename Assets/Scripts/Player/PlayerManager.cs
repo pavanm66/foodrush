@@ -4,15 +4,12 @@ namespace Foodrush.Player
 {
     public class PlayerManager : MonoBehaviour
     {
-        public float forwardSpeed = 5f;
-        public float dragSpeed = 10f;
-        public Vector2 xLimits;  // Minimum and maximum x position
-        private Vector3 dragStartPos;
-
+        [SerializeField] float forwardSpeed = 5f;
+        [SerializeField] float dragSpeed = 10f;
+        [SerializeField] Vector2 xLimits;  // Minimum and maximum x position
 
         void Update()
         {
-            // Automatic forward movement along the z-axis
             transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
 
             // Drag to move along the x-axis
@@ -25,7 +22,9 @@ namespace Foodrush.Player
 
                 // Restrict the x-axis movement to within the limits
                 targetPos.x = Mathf.Clamp(targetPos.x, xLimits.x, xLimits.y);
-                targetPos.z = transform.position.z; // Ensure no unintended z-axis movement
+                // Preserve y and z position of the object
+                targetPos.y = transform.position.y;
+                targetPos.z = transform.position.z;
 
                 // Smoothly interpolate the player's position for drag effect
                 transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
