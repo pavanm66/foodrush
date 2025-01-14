@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Foodrush.Player
@@ -7,7 +8,22 @@ namespace Foodrush.Player
         [SerializeField] float forwardSpeed = 5f;
         [SerializeField] float dragSpeed = 10f;
         [SerializeField] Vector2 xLimits;  // Minimum and maximum x position
+        [SerializeField] GameObject foodrunnerPrefab; // Running player food object
+        [SerializeField] int foodItemIndex = 0; // index of the food item
+        [SerializeField] List<Sprite> foodSprites;
 
+        private GameObject spawnedRunner;
+
+        private void Start()
+        {
+            //change index here if required
+            spawnedRunner = Instantiate(foodrunnerPrefab, gameObject.transform);
+            if (foodSprites.Count > 0)
+            {
+                spawnedRunner.GetComponent<SpriteRenderer>().sprite = foodSprites[foodItemIndex];
+            }
+
+        }
         void Update()
         {
             transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
@@ -28,7 +44,22 @@ namespace Foodrush.Player
 
                 // Smoothly interpolate the player's position for drag effect
                 transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
+
+
+
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    Duplicate();
+                }
             }
+        }
+
+        void Duplicate()
+        {
+            // figure out the position of spawn of the duplicate.
+            var foodrunner = Instantiate(foodrunnerPrefab, gameObject.transform);
+
+
         }
     }
 }
