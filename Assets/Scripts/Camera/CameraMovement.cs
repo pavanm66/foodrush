@@ -32,7 +32,7 @@ namespace Foodrush
         void LateUpdate()
         {
             if (!player) return;
-            transform.position = player.position + offset;  
+            transform.position = new Vector3(offset.x, offset.y, player.position.z + offset.z);  
 
         }
     }

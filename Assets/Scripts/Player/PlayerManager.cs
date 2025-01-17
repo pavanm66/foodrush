@@ -26,6 +26,15 @@ namespace Foodrush.Player
 
         void Update()
         {
+            float jumpHeight = 0.5f; // Height of the jump
+            float jumpSpeed = 18f;    // Speed of the jump
+
+            // Apply a sinusoidal motion to the object's Y position for the jumping effect
+            Vector3 position = transform.position;
+            position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
+            transform.position = position;
+
+
             transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
 
             // Drag to move along the x-axis
