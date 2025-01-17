@@ -14,6 +14,10 @@ namespace Foodrush.Player
 
         [SerializeField] List<SpriteRenderer> foodrunnersList;
 
+        //test code
+        [SerializeField] Board board1;
+        [SerializeField] Board board2;
+        [SerializeField] Board board3;
 
         private void Start()
         {
@@ -41,12 +45,20 @@ namespace Foodrush.Player
                 // Smoothly interpolate the player's position for drag effect
                 transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
 
+            }
+            //test code
 
-                //test code
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    
-                }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Populate(board1);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                Populate(board2);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                Populate(board3);
             }
         }
 
@@ -69,21 +81,100 @@ namespace Foodrush.Player
 
         void Populate(Board board)
         {
-            // figure out the position of spawn of the duplicate.
             var runnerList = CheckMeasures(board.boardType, board.boardValue, out int requiredRunners);
             switch (board.boardType)
             {
                 case BoardType.Addition:
+                    foreach (var runner in runnerList)
+                    {
+                        Transform newPosition = CreateTransform();
+                        runner.transform.localPosition = newPosition.localPosition;
+                        runner.SetActive(true);
+                    }
+
+                    for (int i = 0; i < requiredRunners; i++)
+                    {
+                        Transform newPosition = CreateTransform();
+                        CreateRunner(newPosition);
+                    }
                     break;
+
                 case BoardType.Subtraction:
+                    foreach (var runner in runnerList)
+                    {
+                        runner.SetActive(false);
+                    }
                     break;
+
                 case BoardType.Multiply:
+                    foreach (var runner in runnerList)
+                    {
+                        Transform newPosition = CreateTransform();
+                        runner.transform.localPosition = newPosition.localPosition;
+                        runner.SetActive(true);
+                    }
+
+                    for (int i = 0; i < requiredRunners; i++)
+                    {
+                        Transform newPosition = CreateTransform();
+                        CreateRunner(newPosition);
+                    }
                     break;
+
                 case BoardType.None:
                     break;
             }
+        }
+
+        private Transform CreateTransform()
+        {
+            // Gather all active runners
+            List<GameObject> activeRunners = new();
+            foreach (var runner in foodrunnersList)
+            {
+                if (runner.gameObject.activeSelf)
+                    activeRunners.Add(runner.gameObject);
+            }
+
+            // Calculate the center position of the active runners
+            Vector3 centerPosition = Vector3.zero;
+            foreach (var runner in activeRunners)
+            {
+                centerPosition += runner.transform.position;
+            }
+            centerPosition /= activeRunners.Count;
+
+            // Generate a random direction around the center
+            Vector2 randomDirection = Random.insideUnitCircle.normalized; // Random 2D direction
+
+            // Adjust distance based on sprite size and additional spacing
+            float spriteWidth = activeRunners[0].GetComponent<SpriteRenderer>().bounds.size.x; // Use sprite width
+            float distance = spriteWidth * 1.0f; // Add extra spacing (1.5x the sprite width)
+
+            // Calculate the offset
+            Vector3 offset = new Vector3(randomDirection.x, 0, randomDirection.y) * distance;
+
+            // Calculate the new position
+            Vector3 newPosition = centerPosition + offset;
+
+            // Clamp the position to stay within the xLimits (and optional yLimits if applicable)
+            newPosition.x = Mathf.Clamp(newPosition.x, xLimits.x, xLimits.y);
+
+            // Create and return a new Transform at the calculated position
+            Transform newTransform = new GameObject("NewPosition").transform;
+            newTransform.position = newPosition;
+            newTransform.SetParent(transform); // Optional: Attach to parent for better organization
+            return newTransform;
+        }
 
 
+
+
+        private void CreateRunner(Transform newPosition)
+        {
+            var newRunner = Instantiate(foodrunnerPrefab, newPosition);
+            newRunner.GetComponent<SpriteRenderer>().sprite = foodSprites[foodItemIndex];
+            foodrunnersList.Add(newRunner.GetComponent<SpriteRenderer>());
         }
 
         private List<GameObject> CheckMeasures(BoardType boardType, int boardValue, out int requiredRunners)
@@ -130,12 +221,12 @@ namespace Foodrush.Player
                     else
                     {
                         // Trigger game over events
-                        
+                        Debug.LogError("Game Over");
                     }
                     break;
 
                 case BoardType.Multiply:
-                    if (activeRunners.Count * boardValue >= poolRunners.Count)
+                    if (poolRunners.Count >= activeRunners.Count * boardValue)
                     {
                         for (int i = 0; i < activeRunners.Count * boardValue; i++)
                         {
