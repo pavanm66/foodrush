@@ -19,6 +19,8 @@ namespace Foodrush.Player
         [SerializeField] Board board2;
         [SerializeField] Board board3;
 
+        [SerializeField] bool isPlayerReady;
+
         private void Start()
         {
             Initialize();
@@ -26,53 +28,65 @@ namespace Foodrush.Player
 
         void Update()
         {
-            float jumpHeight = 0.5f; // Height of the jump
-            float jumpSpeed = 18f;    // Speed of the jump
-
-            // Apply a sinusoidal motion to the object's Y position for the jumping effect
-            Vector3 position = transform.position;
-            position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
-            transform.position = position;
-
-
-            transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
-
-            // Drag to move along the x-axis
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
-                // Get the mouse position in world space
-                Vector3 mousePos = Input.mousePosition;
-                mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z; // Maintain z-position
-                Vector3 targetPos = Camera.main.ScreenToWorldPoint(mousePos);
+                isPlayerReady = true;
 
-                // Restrict the x-axis movement to within the limits
-                targetPos.x = Mathf.Clamp(targetPos.x, xLimits.x, xLimits.y);
-                // Preserve y and z position of the object
-                targetPos.y = transform.position.y;
-                targetPos.z = transform.position.z;
-
-                // Smoothly interpolate the player's position for drag effect
-                transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
-
+                GameManager.instance.isGameStarted = true;
             }
-            //test code
+            if (isPlayerReady)
+            {
 
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Populate(board1);
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                Populate(board2);
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                Populate(board3);
+
+                float jumpHeight = 0.5f; // Height of the jump
+                float jumpSpeed = 18f;    // Speed of the jump
+
+                // Apply a sinusoidal motion to the object's Y position for the jumping effect
+                Vector3 position = transform.position;
+                position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
+                transform.position = position;
+
+
+                transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
+
+                // Drag to move along the x-axis
+                if (Input.GetMouseButton(0))
+                {
+                    // Get the mouse position in world space
+                    Vector3 mousePos = Input.mousePosition;
+                    mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z; // Maintain z-position
+                    Vector3 targetPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+                    // Restrict the x-axis movement to within the limits
+                    targetPos.x = Mathf.Clamp(targetPos.x, xLimits.x, xLimits.y);
+                    // Preserve y and z position of the object
+                    targetPos.y = transform.position.y;
+                    targetPos.z = transform.position.z;
+
+                    // Smoothly interpolate the player's position for drag effect
+                    transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
+
+                }
+                //test code
+
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    Populate(board1);
+                }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    Populate(board2);
+                }
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    Populate(board3);
+                }
             }
         }
 
         void Initialize()
         {
+
             //change index here if required
             if (foodSprites.Count > 0)
             {
@@ -86,6 +100,7 @@ namespace Foodrush.Player
             }
             foodrunnersList[0].gameObject.SetActive(true);
             foodrunnersList[0].gameObject.transform.position = Vector3.zero;
+            Time.timeScale = 1;
         }
 
         void Populate(Board board)
