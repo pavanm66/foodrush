@@ -158,35 +158,69 @@ namespace Foodrush.Player
                     activeRunners.Add(runner.gameObject);
             }
 
-            // Calculate the center position of the active runners
-            Vector3 centerPosition = Vector3.zero;
+            // Define hexagonal offsets (relative positions for six surrounding slots)
+            float hexRadius = activeRunners[0].GetComponent<SpriteRenderer>().bounds.size.x * 1.2f; // Adjust for spacing
+            Vector3[] hexOffsets = new Vector3[]
+            {
+        new Vector3(0, 0, hexRadius),                     // Top
+        new Vector3(hexRadius * Mathf.Sqrt(3) / 2, 0, hexRadius / 2),  // Top-right
+        new Vector3(hexRadius * Mathf.Sqrt(3) / 2, 0, -hexRadius / 2), // Bottom-right
+        new Vector3(0, 0, -hexRadius),                   // Bottom
+        new Vector3(-hexRadius * Mathf.Sqrt(3) / 2, 0, -hexRadius / 2), // Bottom-left
+        new Vector3(-hexRadius * Mathf.Sqrt(3) / 2, 0, hexRadius / 2)   // Top-left
+            };
+
+            // Check for empty slots around all active runners
             foreach (var runner in activeRunners)
             {
-                centerPosition += runner.transform.position;
+                foreach (var offset in hexOffsets)
+                {
+                    Vector3 potentialPosition = runner.transform.position + offset;
+
+                    // Ensure the position doesn't overlap with existing objects
+                    bool isOccupied = activeRunners.Exists(r => Vector3.Distance(r.transform.position, potentialPosition) < hexRadius * 0.9f);
+                    if (!isOccupied)
+                    {
+                        // Clamp the position to stay within the xLimits
+                        potentialPosition.x = Mathf.Clamp(potentialPosition.x, xLimits.x, xLimits.y);
+
+                        // Create and return a new Transform at the calculated position
+                        Transform newTransform = new GameObject("NewPosition").transform;
+                        newTransform.position = potentialPosition;
+                        newTransform.SetParent(transform); // Optional: Attach to parent for better organization
+                        return newTransform;
+                    }
+                }
             }
-            centerPosition /= activeRunners.Count;
 
-            // Generate a random direction around the center
-            Vector2 randomDirection = Random.insideUnitCircle.normalized; // Random 2D direction
+            // If all slots around existing runners are filled, expand to a new layer
+            foreach (var runner in activeRunners)
+            {
+                foreach (var offset in hexOffsets)
+                {
+                    Vector3 potentialPosition = runner.transform.position + offset * 2; // Expand to the next hexagonal layer
 
-            // Adjust distance based on sprite size and additional spacing
-            float spriteWidth = activeRunners[0].GetComponent<SpriteRenderer>().bounds.size.x; // Use sprite width
-            float distance = spriteWidth * 1.0f; // Add extra spacing (1.5x the sprite width)
+                    // Ensure the position doesn't overlap with existing objects
+                    bool isOccupied = activeRunners.Exists(r => Vector3.Distance(r.transform.position, potentialPosition) < hexRadius * 0.9f);
+                    if (!isOccupied)
+                    {
+                        // Clamp the position to stay within the xLimits
+                        potentialPosition.x = Mathf.Clamp(potentialPosition.x, xLimits.x, xLimits.y);
 
-            // Calculate the offset
-            Vector3 offset = new Vector3(randomDirection.x, 0, randomDirection.y) * distance;
+                        // Create and return a new Transform at the calculated position
+                        Transform newTransform = new GameObject("NewPosition").transform;
+                        newTransform.position = potentialPosition;
+                        newTransform.SetParent(transform); // Optional: Attach to parent for better organization
+                        return newTransform;
+                    }
+                }
+            }
 
-            // Calculate the new position
-            Vector3 newPosition = centerPosition + offset;
-
-            // Clamp the position to stay within the xLimits (and optional yLimits if applicable)
-            newPosition.x = Mathf.Clamp(newPosition.x, xLimits.x, xLimits.y);
-
-            // Create and return a new Transform at the calculated position
-            Transform newTransform = new GameObject("NewPosition").transform;
-            newTransform.position = newPosition;
-            newTransform.SetParent(transform); // Optional: Attach to parent for better organization
-            return newTransform;
+            // Fallback: If no position is found, return the original position (should not happen in practice)
+            Transform fallbackTransform = new GameObject("FallbackPosition").transform;
+            fallbackTransform.position = transform.position;
+            fallbackTransform.SetParent(transform);
+            return fallbackTransform;
         }
 
 
