@@ -80,15 +80,15 @@ namespace Foodrush
 
         IEnumerator IAnimateText()
         {
-            float speed = 100f;
+            float speed = 150f;
             print(dragText.transform.localPosition.x + " is x pos");
             while (!isClicked && dragText.gameObject.activeSelf)
             {
-                if (dragText.transform.localPosition.x >= 50f)
+                if (dragText.transform.localPosition.x >= 370f)
                 {
                     movingRight = false; 
                 }
-                else if (dragText.transform.localPosition.x <= -50f)
+                else if (dragText.transform.localPosition.x <= -370f)
                 {
                     movingRight = true;
                 }

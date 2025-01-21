@@ -36,8 +36,6 @@ namespace Foodrush.Player
             }
             if (isPlayerReady)
             {
-
-
                 float jumpHeight = 0.5f; // Height of the jump
                 float jumpSpeed = 18f;    // Speed of the jump
 
@@ -210,7 +208,7 @@ namespace Foodrush.Player
 
             foreach (var runner in foodrunnersList)
             {
-                if(runner.gameObject.activeSelf) activeRunners.Add(runner.gameObject);
+                if (runner.gameObject.activeSelf) activeRunners.Add(runner.gameObject);
                 else poolRunners.Add(runner.gameObject);
             }
 
