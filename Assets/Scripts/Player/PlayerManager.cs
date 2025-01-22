@@ -13,6 +13,7 @@ namespace Foodrush.Player
         [SerializeField] List<Sprite> foodSprites;
 
         [SerializeField] List<SpriteRenderer> foodrunnersList;
+        private float spacingVariable = 0.8f;
 
         //test code
         [SerializeField] Board board1;
@@ -159,7 +160,7 @@ namespace Foodrush.Player
             }
 
             // Define hexagonal offsets (relative positions for six surrounding slots)
-            float hexRadius = activeRunners[0].GetComponent<SpriteRenderer>().bounds.size.x * 1.2f; // Adjust for spacing
+            float hexRadius = activeRunners[0].GetComponent<SpriteRenderer>().bounds.size.x * spacingVariable; // Adjust for spacing
             Vector3[] hexOffsets = new Vector3[]
             {
         new Vector3(0, 0, hexRadius),                     // Top
