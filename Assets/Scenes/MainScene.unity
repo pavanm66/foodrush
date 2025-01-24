@@ -4578,10 +4578,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1443386343}
-  - component: {fileID: 1443386344}
   - component: {fileID: 1443386345}
   - component: {fileID: 1443386346}
+<<<<<<< HEAD
   m_Layer: 7
+=======
+  - component: {fileID: 1443386344}
+  m_Layer: 0
+>>>>>>> 9aa4c75a5292324ea9cde8f2144df940e4e452ba
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
