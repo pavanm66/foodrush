@@ -1,21 +1,26 @@
+using JetBrains.Annotations;
 using UnityEngine;
-
-public class Obstacle : ObstacleScript
+namespace Foodrush
 {
-    public ObstacleType obstacleType;
-    public int value;
-    [SerializeField] private bool isTriggered;
-
-    private void OnTriggerEnter(Collider other)
+    public class Obstacle : ObstacleScript
     {
-        if (other.CompareTag("Player"))
+        public ObstacleType obstacleType;
+        public int value;
+        [SerializeField] private bool isTriggered;
+
+        private void OnTriggerEnter(Collider other)
         {
-            if (!isTriggered)
+            if (other.CompareTag("Player"))
             {
-                isTriggered = true;
-                Debug.Log("triggered the player");
+                if (!isTriggered)
+                {
+                    isTriggered = true;
+                    Debug.Log("triggered the player");
+                    player.Populate(this);
+
+                }
             }
         }
-    }
 
+    }
 }

@@ -2007,6 +2007,37 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 1993338470998633741, guid: d40da61ffb2f9ed4cb72dac51528f2bc, type: 3}
   m_PrefabInstance: {fileID: 513891259}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &574097542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 574097543}
+  m_Layer: 0
+  m_Name: OriginPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &574097543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574097542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.13, y: 5.79, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9014041185575902199}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &664337764
 GameObject:
   m_ObjectHideFlags: 0
@@ -7164,10 +7195,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1230509892149885745, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1443386344}
     - target: {fileID: 2202265465953054982, guid: 27583719175408349b16994a714d72d0, type: 3}
       propertyPath: m_Name
       value: ObstacleParent
       objectReference: {fileID: 0}
+    - target: {fileID: 2362560515733324200, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1443386344}
     - target: {fileID: 4901405187746072531, guid: 27583719175408349b16994a714d72d0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7208,6 +7247,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7644080364188781884, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1443386344}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7261,13 +7304,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1078412821974064808, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1078412821974064808, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
+      propertyPath: wheelType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1078412821974064808, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
+      propertyPath: originPoint
+      value: 
+      objectReference: {fileID: 574097542}
+    - target: {fileID: 6259371994283707655, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9048958518304561006, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
       propertyPath: m_Name
       value: StrikeWheel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 656235622262043052, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 574097543}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc3a717ca88132f43988e104dd1b7ef9, type: 3}
 --- !u!4 &9014041185575902199 stripped

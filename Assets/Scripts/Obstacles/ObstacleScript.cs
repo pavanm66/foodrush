@@ -1,20 +1,16 @@
+using Foodrush.Player;
 using UnityEngine;
 
 public class ObstacleScript : MonoBehaviour
 {
-   
+    public PlayerManager player;
     
-   
-    public void AddObstacle(int value)
-    {
-        Debug.Log("Enable these many objects");
-    }
-
 }
 public enum ObstacleType
 {
     Chain,
     Addition,
     Multiply,
-    Subtract
+    Subtract,
+    None
 }

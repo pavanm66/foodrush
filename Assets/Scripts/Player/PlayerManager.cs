@@ -68,18 +68,18 @@ namespace Foodrush.Player
                 }
                 //test code
 
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    Populate(board1);
-                }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    Populate(board2);
-                }
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    Populate(board3);
-                }
+                //if (Input.GetKeyDown(KeyCode.A))
+                //{
+                //    Populate(board1);
+                //}
+                //if (Input.GetKeyDown(KeyCode.S))
+                //{
+                //    Populate(board2);
+                //}
+                //if (Input.GetKeyDown(KeyCode.D))
+                //{
+                //    Populate(board3);
+                //}
             }
         }
 
@@ -102,12 +102,12 @@ namespace Foodrush.Player
             Time.timeScale = 1;
         }
 
-        void Populate(Board board)
+        public void Populate(Obstacle board)
         {
-            var runnerList = CheckMeasures(board.boardType, board.boardValue, out int requiredRunners);
-            switch (board.boardType)
+            var runnerList = CheckMeasures(board.obstacleType, board.value, out int requiredRunners);
+            switch (board.obstacleType)
             {
-                case BoardType.Addition:
+                case ObstacleType.Addition:
                     foreach (var runner in runnerList)
                     {
                         Transform newPosition = CreateTransform();
@@ -122,14 +122,14 @@ namespace Foodrush.Player
                     }
                     break;
 
-                case BoardType.Subtraction:
+                case ObstacleType.Subtract:
                     foreach (var runner in runnerList)
                     {
                         runner.SetActive(false);
                     }
                     break;
 
-                case BoardType.Multiply:
+                case ObstacleType.Multiply:
                     foreach (var runner in runnerList)
                     {
                         Transform newPosition = CreateTransform();
@@ -144,7 +144,7 @@ namespace Foodrush.Player
                     }
                     break;
 
-                case BoardType.None:
+                case ObstacleType.None:
                     break;
             }
         }
@@ -234,7 +234,7 @@ namespace Foodrush.Player
             foodrunnersList.Add(newRunner.GetComponent<SpriteRenderer>());
         }
 
-        private List<GameObject> CheckMeasures(BoardType boardType, int boardValue, out int requiredRunners)
+        private List<GameObject> CheckMeasures(ObstacleType boardType, int boardValue, out int requiredRunners)
         {
             List<GameObject> activeRunners = new();
             List<GameObject> poolRunners = new();
@@ -249,7 +249,7 @@ namespace Foodrush.Player
 
             switch (boardType)
             {
-                case BoardType.Addition:
+                case ObstacleType.Addition:
                     if (poolRunners.Count >= boardValue)
                     {
                         for (int i = 0; i < boardValue; i++)
@@ -267,7 +267,7 @@ namespace Foodrush.Player
                     }
                     break;
 
-                case BoardType.Subtraction:
+                case ObstacleType.Subtract:
                     if (activeRunners.Count > boardValue)
                     {
                         for (int i = 0; i < boardValue; i++)
@@ -282,7 +282,7 @@ namespace Foodrush.Player
                     }
                     break;
 
-                case BoardType.Multiply:
+                case ObstacleType.Multiply:
                     if (poolRunners.Count >= activeRunners.Count * boardValue)
                     {
                         for (int i = 0; i < activeRunners.Count * boardValue; i++)
@@ -301,7 +301,7 @@ namespace Foodrush.Player
                     }
                     break;
 
-                case BoardType.None:
+                case ObstacleType.None:
                     break;
             }
 
