@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Foodrush
 {
-    public class StrikeWheel : MonoBehaviour
+    public class StrikeWheel : ObstacleScript
     {
         [SerializeField] float rotationSpeed = 100f; // Rotation speed in degrees per second
         [SerializeField] GameObject wheel;
@@ -11,13 +11,21 @@ namespace Foodrush
         [SerializeField] private GameObject originPoint;
         [SerializeField] private float speed;
         public StrikeWheelType wheelType;
+        public ObstacleType obstacleType;
 
         void Update()
         {
             // Rotate the wheel around its Z-axis
             wheel.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         }
-       
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag("Runner"))
+            {
+                GetActiveObjectsCount(other.gameObject);
+            }
+        }
+
         private void Start()
         {
             switch (wheelType)

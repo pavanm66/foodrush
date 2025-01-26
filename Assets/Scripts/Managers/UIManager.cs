@@ -55,6 +55,7 @@ namespace Foodrush
             { 
                 StopCoroutine(IAnimateText()); 
                 dragText.gameObject.SetActive(false); 
+                startPanel.SetActive(false);    
             }
         }
         public void PauseGame()

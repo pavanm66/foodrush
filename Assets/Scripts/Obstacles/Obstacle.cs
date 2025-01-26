@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections.Generic;
 using UnityEngine;
 namespace Foodrush
 {
@@ -7,19 +8,28 @@ namespace Foodrush
         public ObstacleType obstacleType;
         public int value;
         [SerializeField] private bool isTriggered;
+        //[SerializeField] int count;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (obstacleType != ObstacleType.Chain)
             {
-                if (!isTriggered)
+                if (other.CompareTag("Runner"))
                 {
-                    isTriggered = true;
-                    Debug.Log("triggered the player");
-                    player.Populate(this);
-
+                    if (!isTriggered)
+                    {
+                        PopulateObjects();
+                    }
                 }
             }
+           
+        }
+      
+        void PopulateObjects()
+        {
+            isTriggered = true;
+            Debug.Log("triggered the player");
+            player.Populate(this);
         }
 
     }
