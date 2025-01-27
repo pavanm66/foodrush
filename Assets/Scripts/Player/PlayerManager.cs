@@ -12,15 +12,16 @@ namespace Foodrush.Player
         [SerializeField] int foodItemIndex = 0; // index of the food item
         [SerializeField] List<Sprite> foodSprites;
 
-        [SerializeField] List<SpriteRenderer> foodrunnersList;
+        [SerializeField] List<GameObject> foodrunnersList;
+        [SerializeField] bool isPlayerReady;
         private float spacingVariable = 0.8f;
 
         //test code
         [SerializeField] Board board1;
         [SerializeField] Board board2;
         [SerializeField] Board board3;
+        [SerializeField] bool isPlayerJumping;
 
-        [SerializeField] bool isPlayerReady;
 
         private void Start()
         {
@@ -37,13 +38,17 @@ namespace Foodrush.Player
             }
             if (isPlayerReady)
             {
-                float jumpHeight = 0.5f; // Height of the jump
-                float jumpSpeed = 18f;    // Speed of the jump
+                if (isPlayerJumping)
+                {
 
-                // Apply a sinusoidal motion to the object's Y position for the jumping effect
-                Vector3 position = transform.position;
-                position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
-                transform.position = position;
+                    float jumpHeight = 0.5f; // Height of the jump
+                    float jumpSpeed = 18f;    // Speed of the jump
+
+                    // Apply a sinusoidal motion to the object's Y position for the jumping effect
+                    Vector3 position = transform.position;
+                    position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
+                    transform.position = position;
+                }
 
 
                 transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
@@ -93,7 +98,7 @@ namespace Foodrush.Player
                 {
                     foreach (var runner in foodrunnersList)
                     {
-                        runner.sprite = foodSprites[foodItemIndex];
+                        runner.GetComponentInChildren<SpriteRenderer>().sprite = foodSprites[foodItemIndex];
                     }
                 }
             }
@@ -160,7 +165,7 @@ namespace Foodrush.Player
             }
 
             // Define hexagonal offsets (relative positions for six surrounding slots)
-            float hexRadius = activeRunners[0].GetComponent<SpriteRenderer>().bounds.size.x * spacingVariable; // Adjust for spacing
+            float hexRadius = activeRunners[0].GetComponentInChildren<SpriteRenderer>().bounds.size.x * spacingVariable; // Adjust for spacing
             Vector3[] hexOffsets = new Vector3[]
             {
         new Vector3(0, 0, hexRadius),                     // Top
@@ -231,7 +236,7 @@ namespace Foodrush.Player
         {
             var newRunner = Instantiate(foodrunnerPrefab, newPosition);
             newRunner.GetComponent<SpriteRenderer>().sprite = foodSprites[foodItemIndex];
-            foodrunnersList.Add(newRunner.GetComponent<SpriteRenderer>());
+            foodrunnersList.Add(newRunner);
         }
 
         private List<GameObject> CheckMeasures(ObstacleType boardType, int boardValue, out int requiredRunners)

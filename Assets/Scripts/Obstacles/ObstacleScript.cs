@@ -9,7 +9,7 @@ public class ObstacleScript : MonoBehaviour
     [SerializeField] int count;
    public void GetActiveObjectsCount(GameObject PlayerObject)
     {
-        triggeredObjects.Add(PlayerObject);
+        triggeredObjects.Add(PlayerObject.GetComponentInParent<GameObject>());
         Debug.Log(triggeredObjects.Count + " are triggered");
         for (int i = 0; i < triggeredObjects.Count; i++)
         {

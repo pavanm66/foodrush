@@ -18,6 +18,7 @@ namespace Foodrush
             // Rotate the wheel around its Z-axis
             wheel.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         }
+
         private void OnTriggerStay(Collider other)
         {
             if (other.CompareTag("Runner"))
@@ -51,7 +52,7 @@ namespace Foodrush
         {
             while (!GameManager.instance.isGameOver)
             {
-                wheel.transform.RotateAround(originPoint.transform.position,Vector3.up, 0.5f);
+                wheel.transform.RotateAround(originPoint.transform.position, Vector3.up, 0.5f);
                 yield return null;
             }
         }
@@ -78,14 +79,14 @@ namespace Foodrush
                 wheel.transform.localPosition += movement;
                 yield return null;
             }
-           
+
         }
     }
     public enum StrikeWheelType
     {
-       still,
-       sideWays,
-       rotateAround
+        still,
+        sideWays,
+        rotateAround
     }
 
 }
