@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +5,10 @@ namespace Foodrush.Player
 {
     public class PlayerManager : MonoBehaviour
     {
+        public List<GameObject> activeRunnersList = new List<GameObject>();
+
+        private float spacingVariable = 0.8f;
+
         [SerializeField] float forwardSpeed = 5f;
         [SerializeField] float dragSpeed = 10f;
         [SerializeField] Vector2 xLimits;  // Minimum and maximum x position
@@ -16,17 +19,6 @@ namespace Foodrush.Player
         [SerializeField] List<GameObject> foodrunnersList;
         [SerializeField] bool isPlayerReady;
         [SerializeField] bool isPlayerOnRamp;
-        private float spacingVariable = 0.8f;
-        private HashSet<Transform> runnersOnRamp = new(); // Track runners on the ramp
-
-        public List<GameObject> activeRunnersList = new List<GameObject>();
-        [SerializeField] GameObject mainCamera;
-
-        //test code
-        [SerializeField] Board board1;
-        [SerializeField] Board board2;
-        [SerializeField] Board board3;
-        [SerializeField] bool isPlayerJumping;
 
 
         private void Start()
@@ -91,6 +83,15 @@ namespace Foodrush.Player
                         runner.transform.localScale = currentScale;
                     }
                 }
+
+                
+                //test code
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GameManager.instance.isWinGame = true;
+                }
+
+
 
                 // Handle runner-specific movement
                 //foreach (var runner in foodrunnersList)
@@ -275,9 +276,6 @@ namespace Foodrush.Player
             return fallbackTransform;
         }
 
-
-
-
         private void CreateRunner(Transform newPosition)
         {
             var newRunner = Instantiate(foodrunnerPrefab, newPosition);
@@ -359,9 +357,6 @@ namespace Foodrush.Player
             return spawningRunners;
         }
 
-        
-
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("WinningTrigger"))
@@ -370,18 +365,10 @@ namespace Foodrush.Player
             }
             if (other.CompareTag("Finish"))
             {
-                forwardSpeed = 10f;
-                mainCamera.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-                Vector3 targetPosition = new Vector3(
-        mainCamera.transform.localPosition.x,
-        mainCamera.transform.localPosition.y,
-        (mainCamera.transform.localPosition.z - 80f)
-    );
-                mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, targetPosition, 10f);
-                //mainCamera.GetComponent<CameraMovement>().UpdateOffset(targetPosition);
                 GameManager.instance.isWinGame = true;
             }
         }
+
         void CheckAndDestroy(GameObject collidedObj)
         {
             if (activeRunnersList.Count > 0)
@@ -390,8 +377,8 @@ namespace Foodrush.Player
                 {
                     for (int i = 0; i < 12; i++)
                     {
-                        activeRunnersList[i].SetActive(false);
-                        activeRunnersList.RemoveAt(i);
+                        //activeRunnersList[i].SetActive(false);
+                        //activeRunnersList.RemoveAt(i);
 
                     }
                     collidedObj.SetActive(false);
@@ -412,11 +399,5 @@ namespace Foodrush.Player
                 GameManager.instance.isCompletedGame = false; 
             }
         }
-
-
-        //    // Remove runner from ramp crossing set
-        //    runnersCrossingRamp.Remove(runner);
-        //}
-
     }
 }
