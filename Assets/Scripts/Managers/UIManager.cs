@@ -50,6 +50,7 @@ namespace Foodrush
             if (GameManager.instance.isGameOver)
             {
                 winOrLosePanel.SetActive(true);
+                startPanel.SetActive(false);
             }
             if (GameManager.instance.isGameStarted) 
             { 

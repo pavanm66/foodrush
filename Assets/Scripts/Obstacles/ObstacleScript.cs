@@ -9,13 +9,15 @@ public class ObstacleScript : MonoBehaviour
     [SerializeField] int count;
    public void GetActiveObjectsCount(GameObject PlayerObject)
     {
-        triggeredObjects.Add(PlayerObject.GetComponentInParent<GameObject>());
+        triggeredObjects.Add(PlayerObject);
         Debug.Log(triggeredObjects.Count + " are triggered");
         for (int i = 0; i < triggeredObjects.Count; i++)
         {
-            Debug.Log("inside loop");
             triggeredObjects[i].SetActive(false);
+            player.activeRunnersList.Remove(triggeredObjects[i]);
         }
+
+        
         //triggeredObjects.Clear();    
     }
 

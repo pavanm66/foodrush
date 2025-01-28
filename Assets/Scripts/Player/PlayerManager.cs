@@ -16,6 +16,9 @@ namespace Foodrush.Player
         [SerializeField] bool isPlayerReady;
         private float spacingVariable = 0.8f;
 
+        public List<GameObject> activeRunnersList = new List<GameObject>();
+        [SerializeField] GameObject mainCamera;
+
         //test code
         [SerializeField] Board board1;
         [SerializeField] Board board2;
@@ -71,6 +74,10 @@ namespace Foodrush.Player
                     transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
 
                 }
+
+                
+                    GameManager.instance.isGameOver = (activeRunnersList.Count == 0);
+                
                 //test code
 
                 //if (Input.GetKeyDown(KeyCode.A))
@@ -103,7 +110,8 @@ namespace Foodrush.Player
                 }
             }
             foodrunnersList[0].gameObject.SetActive(true);
-            foodrunnersList[0].gameObject.transform.position = Vector3.zero;
+            activeRunnersList.Add(foodrunnersList[0]);
+            foodrunnersList[0].gameObject.transform.localPosition = Vector3.zero;
             Time.timeScale = 1;
         }
 
@@ -118,6 +126,7 @@ namespace Foodrush.Player
                         Transform newPosition = CreateTransform();
                         runner.transform.localPosition = newPosition.localPosition;
                         runner.SetActive(true);
+                        activeRunnersList.Add(runner);
                     }
 
                     for (int i = 0; i < requiredRunners; i++)
@@ -131,6 +140,7 @@ namespace Foodrush.Player
                     foreach (var runner in runnerList)
                     {
                         runner.SetActive(false);
+                        activeRunnersList.Remove(runner);
                     }
                     break;
 
@@ -140,6 +150,7 @@ namespace Foodrush.Player
                         Transform newPosition = CreateTransform();
                         runner.transform.localPosition = newPosition.localPosition;
                         runner.SetActive(true);
+                        activeRunnersList.Add(runner);
                     }
 
                     for (int i = 0; i < requiredRunners; i++)
@@ -319,6 +330,47 @@ namespace Foodrush.Player
             // if yes
             // disable the objects 
         }
+
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("WinningTrigger"))
+            {
+                CheckAndDestroy();
+            }
+            if (other.CompareTag("Finish"))
+            {
+                forwardSpeed = 10f;
+                mainCamera.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+                GameManager.instance.isWinGame = true;
+            }
+        }
+        void CheckAndDestroy()
+        {
+            if (activeRunnersList.Count > 0)
+            {
+                if (activeRunnersList.Count > 12)
+                {
+                    for (int i = 0; i < 12; i++)
+                    {
+                        activeRunnersList[i].SetActive(false);
+                        activeRunnersList.RemoveAt(i);
+
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < activeRunnersList.Count; i++)
+                    {
+                        activeRunnersList[i].SetActive(false);
+                        activeRunnersList.RemoveAt(i);
+
+                    }
+                }
+
+            }
+        }
+
 
 
     }
