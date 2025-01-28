@@ -39,7 +39,7 @@ namespace Foodrush.Player
                 transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
 
                 // Drag to move along the x-axis
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButton(0) && !GameManager.instance.isWinGame)
                 {
                     // Get the mouse position in world space
                     Vector3 mousePos = Input.mousePosition;

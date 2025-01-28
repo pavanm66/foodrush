@@ -3021,7 +3021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &287671780
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9763,8 +9763,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82498478f25c080468aadeb11f3f1c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardValue: 5
-  boardType: 1
 --- !u!4 &1160277425
 Transform:
   m_ObjectHideFlags: 0
@@ -15182,8 +15180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82498478f25c080468aadeb11f3f1c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardValue: 5
-  boardType: 2
 --- !u!4 &1859454136
 Transform:
   m_ObjectHideFlags: 0
@@ -15565,8 +15561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82498478f25c080468aadeb11f3f1c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardValue: 5
-  boardType: 0
 --- !u!1001 &1907985667
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16201,7 +16195,6 @@ MonoBehaviour:
   loadingPanel: {fileID: 690535231}
   levelsList:
   - {fileID: 790918035}
-  - {fileID: 0}
   isClicked: 0
   movingRight: 1
   maxTime: 5

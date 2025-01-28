@@ -48,7 +48,7 @@ namespace Foodrush
                     float progress = Mathf.Clamp01(cameraTransitionTimer / cameraTransitionDuration);
 
                     // Target position (only change Y to 2, keep X and Z the same)
-                    Vector3 targetPosition = new Vector3(gameObject.transform.position.x, 2f, gameObject.transform.position.z);
+                    Vector3 targetPosition = new Vector3(gameObject.transform.position.x, player.position.y, gameObject.transform.position.z);
 
                     // Smoothly interpolate position
                     gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, targetPosition, progress);
@@ -67,6 +67,7 @@ namespace Foodrush
                     if (progress >= 1f)
                     {
                         Debug.LogError("camera completed");
+                        //transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, player.position.z + gameObject.transform.position.z);
                     }
                 }
             }
