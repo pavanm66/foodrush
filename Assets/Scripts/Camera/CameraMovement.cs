@@ -9,6 +9,8 @@ namespace Foodrush
         [SerializeField] private float cameraTransitionDuration = 1.5f;
         private float cameraTransitionTimer = 0f;
         private Vector3 offset;   // Offset between the camera and the player
+        private Vector3 defaultPosition;
+        private Quaternion defaultRotation;
 
         private float followSpeed = 5f; // Speed of camera adjustment
 
@@ -27,12 +29,9 @@ namespace Foodrush
             {
                 // Initialize the offset based on initial positions
                 offset = transform.position - player.position;
+                defaultPosition = transform.position;
+                defaultRotation = transform.rotation;
             }
-        }
-
-        private void Update()
-        {
-           
         }
 
         void LateUpdate()
@@ -66,7 +65,7 @@ namespace Foodrush
                     // Ensure we stop updating after the transition is complete
                     if (progress >= 1f)
                     {
-                        Debug.LogError("camera completed");
+                        //Debug.LogError("camera completed");
                         //transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, player.position.z + gameObject.transform.position.z);
                     }
                 }
@@ -80,6 +79,12 @@ namespace Foodrush
         public void UpdateOffset(Vector3 _offset)
         {
             offset = _offset;
+        }
+
+        public void ResetCamera()
+        {
+            transform.position = defaultPosition;
+            transform.rotation = defaultRotation;
         }
     }
 }

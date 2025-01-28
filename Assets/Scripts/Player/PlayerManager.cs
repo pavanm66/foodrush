@@ -8,6 +8,8 @@ namespace Foodrush.Player
         public List<GameObject> activeRunnersList = new List<GameObject>();
 
         private float spacingVariable = 0.8f;
+        private Vector3 defaultPosition;
+
 
         [SerializeField] float forwardSpeed = 5f;
         [SerializeField] float dragSpeed = 10f;
@@ -18,11 +20,12 @@ namespace Foodrush.Player
 
         [SerializeField] List<GameObject> foodrunnersList;
         [SerializeField] bool isPlayerReady;
-        [SerializeField] bool isPlayerOnRamp;
 
+        public CameraMovement maincamera;
 
         private void Start()
         {
+            defaultPosition = transform.position;
             Initialize();
         }
 
@@ -127,7 +130,9 @@ namespace Foodrush.Player
             GameManager.instance.isGameOver = false;
             GameManager.instance.isWinGame = false;
             GameManager.instance.isCompletedGame = false;
-
+            isPlayerReady = false;
+            gameObject.transform.position = defaultPosition;
+            maincamera.ResetCamera();
 
             //change index here if required
             if (foodSprites.Count > 0)
@@ -373,9 +378,10 @@ namespace Foodrush.Player
         {
             if (activeRunnersList.Count > 0)
             {
-                if (activeRunnersList.Count > 12)
+                if (activeRunnersList.Count >= 12)
                 {
-                    for (int i = 0; i < 12; i++)
+                    int looptill = activeRunnersList.Count - 12;
+                    for (int i = activeRunnersList.Count - 1; i > looptill; i--)
                     {
                         activeRunnersList[i].SetActive(false);
                         activeRunnersList.RemoveAt(i);
@@ -385,7 +391,7 @@ namespace Foodrush.Player
                 }
                 else
                 {
-                    for (int i = 0; i < activeRunnersList.Count; i++)
+                    for (int i = activeRunnersList.Count - 1; i >= 0; i--)
                     {
                         activeRunnersList[i].SetActive(false);
                         activeRunnersList.RemoveAt(i);
