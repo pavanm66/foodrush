@@ -1,16 +1,16 @@
-using JetBrains.Annotations;
-using System.Collections.Generic;
 using UnityEngine;
+
 namespace Foodrush
 {
     public class Obstacle : ObstacleScript
     {
         public ObstacleType obstacleType;
         public int value;
-        [SerializeField] private bool isTriggered;
+        [SerializeField] private bool isTriggered = false;
+        
         //[SerializeField] int count;
 
-        private void OnTriggerEnter(Collider other)
+        protected override void OnTriggerEnter(Collider other)
         {
             if (obstacleType != ObstacleType.Chain)
             {
@@ -18,13 +18,14 @@ namespace Foodrush
                 {
                     if (!isTriggered)
                     {
+                        base.OnTriggerEnter(other);
                         PopulateObjects();
                     }
                 }
             }
-           
+
         }
-      
+
         void PopulateObjects()
         {
             isTriggered = true;
