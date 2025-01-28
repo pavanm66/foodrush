@@ -6191,6 +6191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1443386343}
+  cameraTransitionDuration: 1.5
 --- !u!1001 &756717239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10735,6 +10736,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1443386344}
     - target: {fileID: 2362560515733324200, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: secondGO
+      value: 
+      objectReference: {fileID: 1304274986}
+    - target: {fileID: 2362560515733324200, guid: 27583719175408349b16994a714d72d0, type: 3}
       propertyPath: obstacleType
       value: 3
       objectReference: {fileID: 0}
@@ -10795,6 +10800,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1443386344}
     - target: {fileID: 7644080364188781884, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: secondGO
+      value: 
+      objectReference: {fileID: 1304274987}
+    - target: {fileID: 7644080364188781884, guid: 27583719175408349b16994a714d72d0, type: 3}
       propertyPath: obstacleType
       value: 1
       objectReference: {fileID: 0}
@@ -10809,6 +10818,16 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 27583719175408349b16994a714d72d0, type: 3}
+--- !u!1 &1304274986 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4376307797484513615, guid: 27583719175408349b16994a714d72d0, type: 3}
+  m_PrefabInstance: {fileID: 1304274985}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1304274987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3887741454486960696, guid: 27583719175408349b16994a714d72d0, type: 3}
+  m_PrefabInstance: {fileID: 1304274985}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1347056050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11864,8 +11883,6 @@ MonoBehaviour:
   - {fileID: 1076981228}
   isPlayerReady: 0
   isPlayerOnRamp: 0
-  mainCamera: {fileID: 709755948}
-  cameraTransitionDuration: 1.5
 --- !u!54 &1443386345
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15774,6 +15791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1443386343}
+  cameraTransitionDuration: 1.5
 --- !u!114 &1943590507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16965,6 +16983,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1443386344}
+    - target: {fileID: 2362560515733324200, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: secondGO
+      value: 
+      objectReference: {fileID: 6969730919480394557}
     - target: {fileID: 4376307797484513615, guid: 27583719175408349b16994a714d72d0, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -17013,6 +17035,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1443386344}
+    - target: {fileID: 7644080364188781884, guid: 27583719175408349b16994a714d72d0, type: 3}
+      propertyPath: secondGO
+      value: 
+      objectReference: {fileID: 6969730919480394558}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17024,6 +17050,16 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 27583719175408349b16994a714d72d0, type: 3}
+--- !u!1 &6969730919480394557 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4376307797484513615, guid: 27583719175408349b16994a714d72d0, type: 3}
+  m_PrefabInstance: {fileID: 6969730919480394556}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6969730919480394558 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3887741454486960696, guid: 27583719175408349b16994a714d72d0, type: 3}
+  m_PrefabInstance: {fileID: 6969730919480394556}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7370233784111597801
 PrefabInstance:
   m_ObjectHideFlags: 0

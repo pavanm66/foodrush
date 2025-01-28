@@ -57,15 +57,20 @@ namespace Foodrush.Player
 
                 }
 
-                if(!GameManager.instance.isWinGame)
+                if (!GameManager.instance.isWinGame)
                 {
                     GameManager.instance.isGameOver = (activeRunnersList.Count == 0);
+                    if (GameManager.instance.isGameOver)
+                    {
+                        Time.timeScale = 0;
+                    }
+                   
                 }
                 else
                 {
                     GameManager.instance.isCompletedGame = (activeRunnersList.Count == 0);
                 }
-                
+
 
                 float scaleSpeed = 18f;   // Speed of the scale oscillation
                 float minScale = 0.6f;   // Minimum Y scale
@@ -83,15 +88,6 @@ namespace Foodrush.Player
                         runner.transform.localScale = currentScale;
                     }
                 }
-
-                
-                //test code
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    GameManager.instance.isWinGame = true;
-                }
-
-
 
                 // Handle runner-specific movement
                 //foreach (var runner in foodrunnersList)
@@ -126,7 +122,7 @@ namespace Foodrush.Player
             }
         }
 
-       public void Initialize()
+        public void Initialize()
         {
             GameManager.instance.isGameOver = false;
             GameManager.instance.isWinGame = false;
@@ -326,8 +322,12 @@ namespace Foodrush.Player
                     }
                     else
                     {
+                        activeRunnersList.Clear();
+                       
                         // Trigger game over events
                         Debug.LogError("Game Over");
+                       GameManager.instance.isGameOver = true;
+                        
                     }
                     break;
 
@@ -377,8 +377,8 @@ namespace Foodrush.Player
                 {
                     for (int i = 0; i < 12; i++)
                     {
-                        //activeRunnersList[i].SetActive(false);
-                        //activeRunnersList.RemoveAt(i);
+                        activeRunnersList[i].SetActive(false);
+                        activeRunnersList.RemoveAt(i);
 
                     }
                     collidedObj.SetActive(false);
@@ -391,12 +391,13 @@ namespace Foodrush.Player
                         activeRunnersList.RemoveAt(i);
 
                     }
+                    GameManager.instance.isCompletedGame = false;
                 }
 
             }
             else
             {
-                GameManager.instance.isCompletedGame = false; 
+                GameManager.instance.isCompletedGame = false;
             }
         }
     }

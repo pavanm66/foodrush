@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6259371994283707655}
   - component: {fileID: 8764571184650651113}
-  - component: {fileID: 7180996195391006249}
   m_Layer: 8
   m_Name: spikes_0 (1)
   m_TagString: Untagged
@@ -89,27 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!65 &7180996195391006249
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2657730020734918142}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 4.82, y: 4.820001, z: 0.20000005}
-  m_Center: {x: 0, y: -0.0000019073486, z: 0}
 --- !u!1 &3272639054653943279
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,6 +304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 656235622262043052}
   - component: {fileID: 1078412821974064808}
+  - component: {fileID: 4817866373716676266}
   m_Layer: 8
   m_Name: StrikeWheel
   m_TagString: Untagged
@@ -362,9 +341,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0858d1a59f2364545a521e023008ed82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  triggeredObjects: []
+  sideBySideColliders: []
+  count: 0
   rotationSpeed: 100
-  wheel: {fileID: 2657730020734918142}
+  wheel: {fileID: 9048958518304561006}
   movingRight: 1
   originPoint: {fileID: 8200349558374534008}
   speed: 10
   wheelType: 0
+  obstacleType: 0
+--- !u!65 &4817866373716676266
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9048958518304561006}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.7873363, y: 5.3829346, z: 1}
+  m_Center: {x: 0.007968545, y: -0.43154788, z: 9.727614e-16}

@@ -65,11 +65,11 @@ namespace Foodrush
         {
             while (!GameManager.instance.isGameOver)
             {
-                if (wheel.transform.localPosition.x >= 7f)
+                if (wheel.transform.localPosition.x >= 3.3f)
                 {
                     movingRight = false;
                 }
-                else if (wheel.transform.localPosition.x <= -0f)
+                else if (wheel.transform.localPosition.x <= -3.3f)
                 {
                     movingRight = true;
                 }

@@ -6,11 +6,12 @@ namespace Foodrush
     {
         public ObstacleType obstacleType;
         public int value;
-        [SerializeField] private bool isTriggered = false;
+        public bool isTriggered = false;
+        public GameObject secondGO;
         
         //[SerializeField] int count;
 
-        protected override void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (obstacleType != ObstacleType.Chain)
             {
@@ -18,8 +19,9 @@ namespace Foodrush
                 {
                     if (!isTriggered)
                     {
-                        base.OnTriggerEnter(other);
                         PopulateObjects();
+                        this.gameObject.SetActive(false);
+                        secondGO.GetComponent<BoxCollider>().enabled = false; 
                     }
                 }
             }

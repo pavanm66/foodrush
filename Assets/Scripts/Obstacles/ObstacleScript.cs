@@ -8,8 +8,10 @@ namespace Foodrush
     {
         public PlayerManager player;
         [SerializeField] List<GameObject> triggeredObjects = new List<GameObject>();
-        [SerializeField] List<BoxCollider> sideBySideColliders = new List<BoxCollider>();
+        [SerializeField] List<GameObject> sideBySideColliders = new List<GameObject>();
         [SerializeField] int count;
+
+     
 
         public void GetActiveObjectsCount(GameObject PlayerObject)
         {
@@ -20,21 +22,24 @@ namespace Foodrush
                 triggeredObjects[i].SetActive(false);
                 player.activeRunnersList.Remove(triggeredObjects[i]);
             }
-
+            
 
             //triggeredObjects.Clear();    
         }
+     
 
-        protected virtual void OnTriggerEnter(Collider other)
-        {
-            //foreach (BoxCollider _collider in sideBySideColliders)
-            //{
-            //    Debug.Log($"Collider state before: {_collider.enabled}");
-            //    _collider.enabled = false;
-            //    Debug.Log($"Collider state after: {_collider.enabled}");
-            //}
+        //public virtual void DisableColliders(GameObject obj)
+        //{
+        //    Debug.Log("here in disable colliders" + obj);
+        //    if (obj.GetComponent<Obstacle>())
+        //        foreach (GameObject _collider in sideBySideColliders)
+        //        {
+        //            Debug.Log("here ");
+        //            //if (_collider.GetComponent<Obstacle>().obstacleType != ObstacleType.Chain)
+        //                _collider.GetComponent<BoxCollider>().enabled = false;
+        //        }
 
-        }
+        //}
     }
     public enum ObstacleType
     {
