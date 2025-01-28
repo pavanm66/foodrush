@@ -6,6 +6,9 @@ TagManager:
   tags:
   - FoodItem
   - Runner
+  - Ramp
+  - RampStart
+  - RampEnd
   layers:
   - Default
   - TransparentFX
