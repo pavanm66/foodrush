@@ -1,6 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Foodrush
 {
@@ -13,8 +16,15 @@ namespace Foodrush
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private GameObject quitPanel;
         [SerializeField] private GameObject winOrLosePanel;
+        [SerializeField] private GameObject loseButton;
+        [SerializeField] private GameObject winButton;
         [SerializeField] private RectTransform dragText;
+        [SerializeField] private TextMeshProUGUI winOrLoseText;
 
+        [SerializeField] Image loadingImage;
+        [SerializeField] GameObject loadingPanel;
+
+        [SerializeField] List<GameObject> levelsList;
         private bool isGamePaused;
         public bool IsGamePaused
         {
@@ -30,15 +40,24 @@ namespace Foodrush
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
+            Initialise();
+        }
+
+        private void Initialise()
+        {
             if (settingsPanel != null) settingsPanel.SetActive(false);
             if (startPanel != null) startPanel.SetActive(true);
             if (quitPanel != null) quitPanel.SetActive(false);
             if (pausePanel != null) pausePanel.SetActive(false);
             if (winOrLosePanel != null) winOrLosePanel.SetActive(false);
             StartCoroutine(IAnimateText());
+            if (!levelsList[1].activeSelf)
+                levelsList[0].SetActive(true);
+            else
+            {
+                levelsList[0].SetActive(false);
+            }
         }
-
-
 
         // Update is called once per frame
         void Update()
@@ -50,13 +69,24 @@ namespace Foodrush
             if (GameManager.instance.isGameOver)
             {
                 winOrLosePanel.SetActive(true);
+                winOrLoseText.text = "You Lose";
+                winButton.SetActive(false);
+                loseButton.SetActive(true);
                 startPanel.SetActive(false);
             }
-            if (GameManager.instance.isGameStarted) 
-            { 
-                StopCoroutine(IAnimateText()); 
-                dragText.gameObject.SetActive(false); 
-                startPanel.SetActive(false);    
+            if (GameManager.instance.isCompletedGame)
+            {
+                winOrLosePanel.SetActive(true);
+                winOrLoseText.text = "You Win";
+                winButton.SetActive(true);
+                loseButton.SetActive(false);
+                startPanel.SetActive(false);
+            }
+            if (GameManager.instance.isGameStarted)
+            {
+                StopCoroutine(IAnimateText());
+                dragText.gameObject.SetActive(false);
+                startPanel.SetActive(false);
             }
         }
         public void PauseGame()
@@ -78,7 +108,7 @@ namespace Foodrush
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         [SerializeField] bool isClicked;
-        [SerializeField] private bool movingRight = true; 
+        [SerializeField] private bool movingRight = true;
 
         IEnumerator IAnimateText()
         {
@@ -88,7 +118,7 @@ namespace Foodrush
             {
                 if (dragText.transform.localPosition.x >= 370f)
                 {
-                    movingRight = false; 
+                    movingRight = false;
                 }
                 else if (dragText.transform.localPosition.x <= -370f)
                 {
@@ -101,7 +131,32 @@ namespace Foodrush
                 yield return null;
             }
         }
+        public void LoadNextLevel()
+        {
+            StartCoroutine(ILoadNextLevel());
+        }
+        [SerializeField] float maxTime = 5f;
+        [SerializeField] float time = 0f;
+        IEnumerator ILoadNextLevel()
+        {
+            GameManager.instance.player.gameObject.SetActive(false);
+            loadingPanel.SetActive(true);
+            while (time < maxTime)
+            {
+                time += Time.deltaTime;
+                loadingImage.fillAmount = time / maxTime;
 
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            loadingPanel.SetActive(false);
+            winOrLosePanel.SetActive(false);
+            startPanel.SetActive(true);
+            levelsList[1].SetActive(true);
+            Initialise();
+            GameManager.instance.player.Initialize();
+
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
 
     }
 }

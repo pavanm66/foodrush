@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public bool isGameStarted;
     public bool isGameOver;
     public bool isWinGame;
+    public bool isCompletedGame;
     public PlayerManager player;
 
     private void Awake()

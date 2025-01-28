@@ -75,8 +75,14 @@ namespace Foodrush.Player
 
                 }
 
-                
+                if(!GameManager.instance.isWinGame)
+                {
                     GameManager.instance.isGameOver = (activeRunnersList.Count == 0);
+                }
+                else
+                {
+                    GameManager.instance.isCompletedGame = (activeRunnersList.Count == 0);
+                }
                 
                 //test code
 
@@ -95,8 +101,12 @@ namespace Foodrush.Player
             }
         }
 
-        void Initialize()
+       public void Initialize()
         {
+            GameManager.instance.isGameOver = false;
+            GameManager.instance.isWinGame = false;
+            GameManager.instance.isCompletedGame = false;
+
 
             //change index here if required
             if (foodSprites.Count > 0)
@@ -112,6 +122,7 @@ namespace Foodrush.Player
             foodrunnersList[0].gameObject.SetActive(true);
             activeRunnersList.Add(foodrunnersList[0]);
             foodrunnersList[0].gameObject.transform.localPosition = Vector3.zero;
+            //print(Time.timeScale);
             Time.timeScale = 1;
         }
 
@@ -336,16 +347,23 @@ namespace Foodrush.Player
         {
             if (other.CompareTag("WinningTrigger"))
             {
-                CheckAndDestroy();
+                CheckAndDestroy(other.gameObject);
             }
             if (other.CompareTag("Finish"))
             {
                 forwardSpeed = 10f;
                 mainCamera.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+                Vector3 targetPosition = new Vector3(
+        mainCamera.transform.localPosition.x,
+        mainCamera.transform.localPosition.y,
+        (mainCamera.transform.localPosition.z - 80f)
+    );
+                mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, targetPosition, 10f);
+                //mainCamera.GetComponent<CameraMovement>().UpdateOffset(targetPosition);
                 GameManager.instance.isWinGame = true;
             }
         }
-        void CheckAndDestroy()
+        void CheckAndDestroy(GameObject collidedObj)
         {
             if (activeRunnersList.Count > 0)
             {
@@ -357,6 +375,7 @@ namespace Foodrush.Player
                         activeRunnersList.RemoveAt(i);
 
                     }
+                    collidedObj.SetActive(false);
                 }
                 else
                 {
@@ -368,6 +387,10 @@ namespace Foodrush.Player
                     }
                 }
 
+            }
+            else
+            {
+                GameManager.instance.isCompletedGame = false; 
             }
         }
 
