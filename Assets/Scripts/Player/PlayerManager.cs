@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,11 @@ namespace Foodrush.Player
 
         [SerializeField] List<GameObject> foodrunnersList;
         [SerializeField] bool isPlayerReady;
+        [SerializeField] bool isPlayerOnRamp;
         private float spacingVariable = 0.8f;
+        private HashSet<Transform> runnersOnRamp = new(); // Track runners on the ramp
+
+
 
         //test code
         [SerializeField] Board board1;
@@ -38,19 +43,6 @@ namespace Foodrush.Player
             }
             if (isPlayerReady)
             {
-                if (isPlayerJumping)
-                {
-
-                    float jumpHeight = 0.5f; // Height of the jump
-                    float jumpSpeed = 18f;    // Speed of the jump
-
-                    // Apply a sinusoidal motion to the object's Y position for the jumping effect
-                    Vector3 position = transform.position;
-                    position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
-                    transform.position = position;
-                }
-
-
                 transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
 
                 // Drag to move along the x-axis
@@ -71,6 +63,40 @@ namespace Foodrush.Player
                     transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
 
                 }
+
+                float scaleSpeed = 18f;   // Speed of the scale oscillation
+                float minScale = 0.6f;   // Minimum Y scale
+                float maxScale = 1f;     // Maximum Y scale
+
+                float scaleFactor = Mathf.Lerp(minScale, maxScale, (Mathf.Sin(Time.time * scaleSpeed) + 1) / 2);
+
+                foreach (var runner in foodrunnersList)
+                {
+                    if (runner.gameObject.activeSelf)
+                    {
+                        // Apply the scale factor to the Y scale
+                        Vector3 currentScale = runner.transform.localScale;
+                        currentScale.y = scaleFactor;
+                        runner.transform.localScale = currentScale;
+                    }
+                }
+
+                // Handle runner-specific movement
+                //foreach (var runner in foodrunnersList)
+                //{
+                //    Transform runnerTransform = runner.transform;
+
+                //    // If the runner is on the ramp, skip jumping
+                //    if (runnersOnRamp.Contains(runnerTransform)) continue;
+
+                //    // Regular jumping motion
+                //    float jumpHeight = 0.3f;
+                //    float jumpSpeed = 15f;
+                //    Vector3 position = runnerTransform.localPosition;
+                //    position.y = Mathf.Sin(Time.time * jumpSpeed) * jumpHeight;
+                //    runnerTransform.localPosition = position;
+                //}
+
                 //test code
 
                 //if (Input.GetKeyDown(KeyCode.A))
@@ -103,7 +129,7 @@ namespace Foodrush.Player
                 }
             }
             foodrunnersList[0].gameObject.SetActive(true);
-            foodrunnersList[0].gameObject.transform.position = Vector3.zero;
+            foodrunnersList[0].gameObject.transform.localPosition = Vector3.zero;
             Time.timeScale = 1;
         }
 
@@ -235,7 +261,7 @@ namespace Foodrush.Player
         private void CreateRunner(Transform newPosition)
         {
             var newRunner = Instantiate(foodrunnerPrefab, newPosition);
-            newRunner.GetComponent<SpriteRenderer>().sprite = foodSprites[foodItemIndex];
+            newRunner.GetComponentInChildren<SpriteRenderer>().sprite = foodSprites[foodItemIndex];
             foodrunnersList.Add(newRunner);
         }
 
@@ -313,13 +339,99 @@ namespace Foodrush.Player
             return spawningRunners;
         }
 
-        void DestroyObjects(int number)
-        {
-            // check if number is biggerthan the list of objects
-            // if yes
-            // disable the objects 
-        }
+        //private void OnTriggerEnter(Collider other)
+        //{
+        //    if (other.CompareTag("RampStart"))
+        //    {
+        //        // Disable jumping for runners entering the ramp
+        //        foreach (var runner in foodrunnersList)
+        //        {
+        //            if (runner.activeSelf)
+        //                if (other.bounds.Contains(runner.transform.position))
+        //                {
+        //                    if(!runnersOnRamp.Contains(runner.transform)) 
+        //                        runnersOnRamp.Add(runner.transform);
+        //                }
+        //        }
+        //    }
+        //}
 
+        //private void OnTriggerExit(Collider other)
+        //{
+        //    if (other.CompareTag("RampEnd"))
+        //    {
+        //        // Re-enable jumping for runners exiting the ramp
+        //        foreach (var runner in foodrunnersList)
+        //        {
+        //            if (runner.activeSelf)
+        //            if (other.bounds.Contains(runner.transform.position))
+        //            {
+        //                if (runnersOnRamp.Contains(runner.transform))
+        //                    runnersOnRamp.Remove(runner.transform);
+        //                }
+        //        }
+        //    }
+        //}
+
+
+        //private void OnTriggerEnter(Collider other)
+        //{
+        //    if (other.CompareTag("Ramp"))
+        //    {
+        //        // Check if any runner is touching the ramp
+        //        foreach (var runner in foodrunnersList)
+        //        {
+        //            if (other.bounds.Contains(runner.transform.position))
+        //            {
+        //                HandleRunnerRampCrossing(runner.transform, other.transform);
+        //            }
+        //        }
+        //    }
+        //}
+
+
+        //private void HandleRunnerRampCrossing(Transform runner, Transform ramp)
+        //{
+        //    // Skip if the runner is already crossing
+        //    if (runnersCrossingRamp.Contains(runner)) return;
+
+        //    StartCoroutine(RampCrossRoutine(runner, ramp));
+        //}
+
+        //private IEnumerator RampCrossRoutine(Transform runner, Transform ramp)
+        //{
+        //    runnersCrossingRamp.Add(runner); // Mark as crossing
+
+        //    // Calculate ramp crossing positions
+        //    Vector3 startPos = runner.position;
+        //    Vector3 midPos = ramp.position + Vector3.up * rampCrossHeight; // Midpoint at ramp height
+        //    Vector3 endPos = ramp.position + Vector3.forward * 2f; // End slightly ahead of ramp
+
+        //    float elapsedTime = 0f;
+        //    float duration = rampCrossSpeed;
+
+        //    // Smoothly move runner over the ramp
+        //    while (elapsedTime < duration)
+        //    {
+        //        float t = elapsedTime / duration;
+
+        //        // Move runner through quadratic curve (up and down)
+        //        runner.position = Vector3.Lerp(
+        //            Vector3.Lerp(startPos, midPos, t),
+        //            Vector3.Lerp(midPos, endPos, t),
+        //            t
+        //        );
+
+        //        elapsedTime += Time.deltaTime;
+        //        yield return null;
+        //    }
+
+        //    // Ensure final position
+        //    runner.position = endPos;
+
+        //    // Remove runner from ramp crossing set
+        //    runnersCrossingRamp.Remove(runner);
+        //}
 
     }
 }
