@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class BombScript : MonoBehaviour
 {
-   public ObstacleType type;
-    [SerializeField] private float blastDelay = 0.5f; // Delay before the explosion
+    public ObstacleType type;
+    [SerializeField] private GameObject player;          // Reference to the player object
+    [SerializeField] private float blastDelay = 0.5f;    // Delay before the explosion
+    [SerializeField] private List<GameObject> collidingObjects = new List<GameObject>(); // To track colliding objects
     //[SerializeField] private ParticleSystem explosionEffect; // Optional explosion effect
-
-   [SerializeField] private List<GameObject> collidingObjects = new List<GameObject>(); // To track player objects hitting the bomb
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,20 +19,15 @@ public class BombScript : MonoBehaviour
             {
                 collidingObjects.Add(other.gameObject);
             }
-            Debug.Log(collidingObjects.Count + " is colliding count ");
-            // Start the explosion process
-            TriggerExplosion();
+            Debug.Log(collidingObjects.Count + " is colliding count");
+
+            // Start the explosion process only if it hasn't started
+            if (!IsInvoking(nameof(Explode)))
+            {
+                TriggerExplosion();
+            }
         }
     }
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    // Remove the object from the colliding objects list if it exits the collider
-    //    if (other.CompareTag("Runner") && collidingObjects.Contains(other.gameObject))
-    //    {
-    //        collidingObjects.Remove(other.gameObject);
-    //    }
-    //}
 
     private void TriggerExplosion()
     {
@@ -49,21 +44,49 @@ public class BombScript : MonoBehaviour
     private void Explode()
     {
         Debug.Log(collidingObjects.Count + " is count in explode");
+
         // Disable only the objects in the collidingObjects list
         foreach (GameObject obj in collidingObjects)
         {
             if (obj != null) // Ensure the object still exists
             {
                 obj.SetActive(false);
-                Debug.Log(obj.name + "  is name ");
+                Debug.Log(obj.name + " is disabled");
+                GameManager.instance.player.activeRunnersList.Remove(obj);
             }
         }
 
         // Clear the list of colliding objects
-        //collidingObjects.Clear();
+        collidingObjects.Clear();
 
-        // Destroy the bomb after the explosion
-        //Destroy(gameObject);
+        // Check if the game is over after disabling objects
+        //if (IsGameOver(player))
+        //{
+        //    Debug.Log("Game Over!");
+        //    GameManager.instance.isGameOver = true;
+        //    Time.timeScale = 0;
+        //    // Implement game-over logic here (e.g., show UI, restart, etc.)
+        //}
+
+        // Disable or destroy the bomb after the explosion
         gameObject.SetActive(false);
+    }
+
+    private bool IsGameOver(GameObject player)
+    {
+        int activeChildrenCount = 0;
+
+        // Loop through all child objects of the player
+        for (int i = 0; i < player.transform.childCount; i++)
+        {
+            // Check if the child GameObject is active
+            if (player.transform.GetChild(i).gameObject.activeSelf)
+            {
+                activeChildrenCount++;
+            }
+        }
+
+        // Game is over if only one or no child is active
+        return activeChildrenCount <= 1;
     }
 }

@@ -19,7 +19,8 @@ namespace Foodrush.Player
         private float spacingVariable = 0.8f;
         private HashSet<Transform> runnersOnRamp = new(); // Track runners on the ramp
 
-
+        public List<GameObject> activeRunnersList = new List<GameObject>();
+        [SerializeField] GameObject mainCamera;
 
         //test code
         [SerializeField] Board board1;
@@ -63,6 +64,16 @@ namespace Foodrush.Player
                     transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
 
                 }
+
+                if(!GameManager.instance.isWinGame)
+                {
+                    GameManager.instance.isGameOver = (activeRunnersList.Count == 0);
+                }
+                else
+                {
+                    GameManager.instance.isCompletedGame = (activeRunnersList.Count == 0);
+                }
+                
 
                 float scaleSpeed = 18f;   // Speed of the scale oscillation
                 float minScale = 0.6f;   // Minimum Y scale
@@ -114,8 +125,12 @@ namespace Foodrush.Player
             }
         }
 
-        void Initialize()
+       public void Initialize()
         {
+            GameManager.instance.isGameOver = false;
+            GameManager.instance.isWinGame = false;
+            GameManager.instance.isCompletedGame = false;
+
 
             //change index here if required
             if (foodSprites.Count > 0)
@@ -129,7 +144,9 @@ namespace Foodrush.Player
                 }
             }
             foodrunnersList[0].gameObject.SetActive(true);
+            activeRunnersList.Add(foodrunnersList[0]);
             foodrunnersList[0].gameObject.transform.localPosition = Vector3.zero;
+            //print(Time.timeScale);
             Time.timeScale = 1;
         }
 
@@ -144,6 +161,7 @@ namespace Foodrush.Player
                         Transform newPosition = CreateTransform();
                         runner.transform.localPosition = newPosition.localPosition;
                         runner.SetActive(true);
+                        activeRunnersList.Add(runner);
                     }
 
                     for (int i = 0; i < requiredRunners; i++)
@@ -157,6 +175,7 @@ namespace Foodrush.Player
                     foreach (var runner in runnerList)
                     {
                         runner.SetActive(false);
+                        activeRunnersList.Remove(runner);
                     }
                     break;
 
@@ -166,6 +185,7 @@ namespace Foodrush.Player
                         Transform newPosition = CreateTransform();
                         runner.transform.localPosition = newPosition.localPosition;
                         runner.SetActive(true);
+                        activeRunnersList.Add(runner);
                     }
 
                     for (int i = 0; i < requiredRunners; i++)
@@ -339,95 +359,60 @@ namespace Foodrush.Player
             return spawningRunners;
         }
 
-        //private void OnTriggerEnter(Collider other)
-        //{
-        //    if (other.CompareTag("RampStart"))
-        //    {
-        //        // Disable jumping for runners entering the ramp
-        //        foreach (var runner in foodrunnersList)
-        //        {
-        //            if (runner.activeSelf)
-        //                if (other.bounds.Contains(runner.transform.position))
-        //                {
-        //                    if(!runnersOnRamp.Contains(runner.transform)) 
-        //                        runnersOnRamp.Add(runner.transform);
-        //                }
-        //        }
-        //    }
-        //}
-
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    if (other.CompareTag("RampEnd"))
-        //    {
-        //        // Re-enable jumping for runners exiting the ramp
-        //        foreach (var runner in foodrunnersList)
-        //        {
-        //            if (runner.activeSelf)
-        //            if (other.bounds.Contains(runner.transform.position))
-        //            {
-        //                if (runnersOnRamp.Contains(runner.transform))
-        //                    runnersOnRamp.Remove(runner.transform);
-        //                }
-        //        }
-        //    }
-        //}
+        
 
 
-        //private void OnTriggerEnter(Collider other)
-        //{
-        //    if (other.CompareTag("Ramp"))
-        //    {
-        //        // Check if any runner is touching the ramp
-        //        foreach (var runner in foodrunnersList)
-        //        {
-        //            if (other.bounds.Contains(runner.transform.position))
-        //            {
-        //                HandleRunnerRampCrossing(runner.transform, other.transform);
-        //            }
-        //        }
-        //    }
-        //}
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("WinningTrigger"))
+            {
+                CheckAndDestroy(other.gameObject);
+            }
+            if (other.CompareTag("Finish"))
+            {
+                forwardSpeed = 10f;
+                mainCamera.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+                Vector3 targetPosition = new Vector3(
+        mainCamera.transform.localPosition.x,
+        mainCamera.transform.localPosition.y,
+        (mainCamera.transform.localPosition.z - 80f)
+    );
+                mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, targetPosition, 10f);
+                //mainCamera.GetComponent<CameraMovement>().UpdateOffset(targetPosition);
+                GameManager.instance.isWinGame = true;
+            }
+        }
+        void CheckAndDestroy(GameObject collidedObj)
+        {
+            if (activeRunnersList.Count > 0)
+            {
+                if (activeRunnersList.Count > 12)
+                {
+                    for (int i = 0; i < 12; i++)
+                    {
+                        activeRunnersList[i].SetActive(false);
+                        activeRunnersList.RemoveAt(i);
 
+                    }
+                    collidedObj.SetActive(false);
+                }
+                else
+                {
+                    for (int i = 0; i < activeRunnersList.Count; i++)
+                    {
+                        activeRunnersList[i].SetActive(false);
+                        activeRunnersList.RemoveAt(i);
 
-        //private void HandleRunnerRampCrossing(Transform runner, Transform ramp)
-        //{
-        //    // Skip if the runner is already crossing
-        //    if (runnersCrossingRamp.Contains(runner)) return;
+                    }
+                }
 
-        //    StartCoroutine(RampCrossRoutine(runner, ramp));
-        //}
+            }
+            else
+            {
+                GameManager.instance.isCompletedGame = false; 
+            }
+        }
 
-        //private IEnumerator RampCrossRoutine(Transform runner, Transform ramp)
-        //{
-        //    runnersCrossingRamp.Add(runner); // Mark as crossing
-
-        //    // Calculate ramp crossing positions
-        //    Vector3 startPos = runner.position;
-        //    Vector3 midPos = ramp.position + Vector3.up * rampCrossHeight; // Midpoint at ramp height
-        //    Vector3 endPos = ramp.position + Vector3.forward * 2f; // End slightly ahead of ramp
-
-        //    float elapsedTime = 0f;
-        //    float duration = rampCrossSpeed;
-
-        //    // Smoothly move runner over the ramp
-        //    while (elapsedTime < duration)
-        //    {
-        //        float t = elapsedTime / duration;
-
-        //        // Move runner through quadratic curve (up and down)
-        //        runner.position = Vector3.Lerp(
-        //            Vector3.Lerp(startPos, midPos, t),
-        //            Vector3.Lerp(midPos, endPos, t),
-        //            t
-        //        );
-
-        //        elapsedTime += Time.deltaTime;
-        //        yield return null;
-        //    }
-
-        //    // Ensure final position
-        //    runner.position = endPos;
 
         //    // Remove runner from ramp crossing set
         //    runnersCrossingRamp.Remove(runner);

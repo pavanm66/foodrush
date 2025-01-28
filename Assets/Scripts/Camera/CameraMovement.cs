@@ -35,5 +35,9 @@ namespace Foodrush
             transform.position = new Vector3(offset.x, offset.y, player.position.z + offset.z);  
 
         }
+        public void UpdateOffset(Vector3 _offset)
+        {
+            offset = _offset;
+        }
     }
 }
