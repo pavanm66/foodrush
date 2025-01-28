@@ -45,6 +45,7 @@ namespace Foodrush
 
         private void Initialise()
         {
+            Debug.Log(" here is initialise");
             if (settingsPanel != null) settingsPanel.SetActive(false);
             if (startPanel != null) startPanel.SetActive(true);
             if (quitPanel != null) quitPanel.SetActive(false);
@@ -149,12 +150,12 @@ namespace Foodrush
                 yield return new WaitForSeconds(Time.deltaTime);
             }
             loadingPanel.SetActive(false);
-            winOrLosePanel.SetActive(false);
-            startPanel.SetActive(true);
+            //winOrLosePanel.SetActive(false);
+            //startPanel.SetActive(true);
             levelsList[1].SetActive(true);
             Initialise();
             GameManager.instance.player.Initialize();
-
+            GameManager.instance.player.gameObject.SetActive(true);
             yield return new WaitForSeconds(Time.deltaTime);
         }
 

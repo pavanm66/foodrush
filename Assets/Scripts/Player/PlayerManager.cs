@@ -22,10 +22,12 @@ namespace Foodrush.Player
         [SerializeField] bool isPlayerReady;
 
         public CameraMovement maincamera;
+        private Quaternion defaultRotation;
 
         private void Start()
         {
             defaultPosition = transform.position;
+            defaultRotation = transform.rotation;
             Initialize();
         }
 
@@ -132,6 +134,7 @@ namespace Foodrush.Player
             GameManager.instance.isCompletedGame = false;
             isPlayerReady = false;
             gameObject.transform.position = defaultPosition;
+            gameObject.transform.rotation = defaultRotation;
             maincamera.ResetCamera();
 
             //change index here if required

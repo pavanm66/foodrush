@@ -12326,6 +12326,7 @@ MonoBehaviour:
   - {fileID: 2125869151}
   - {fileID: 1076981228}
   isPlayerReady: 0
+  maincamera: {fileID: 709755953}
 --- !u!54 &1443386345
 Rigidbody:
   m_ObjectHideFlags: 0
