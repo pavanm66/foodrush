@@ -12,8 +12,6 @@ namespace Foodrush
         private Vector3 defaultPosition;
         private Quaternion defaultRotation;
 
-        private float followSpeed = 5f; // Speed of camera adjustment
-
         private void Awake()
         {
             if (!player)
@@ -83,6 +81,7 @@ namespace Foodrush
 
         public void ResetCamera()
         {
+            cameraTransitionTimer = 0f;
             transform.position = defaultPosition;
             transform.rotation = defaultRotation;
         }
