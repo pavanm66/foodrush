@@ -11,7 +11,7 @@ namespace Foodrush
         [SerializeField] List<GameObject> sideBySideColliders = new List<GameObject>();
         [SerializeField] int count;
 
-     
+
 
         public void GetActiveObjectsCount(GameObject PlayerObject)
         {
@@ -22,11 +22,15 @@ namespace Foodrush
                 triggeredObjects[i].SetActive(false);
                 player.activeRunnersList.Remove(triggeredObjects[i]);
             }
-            
+
 
             //triggeredObjects.Clear();    
         }
-     
+        public void ClearTriggeredList()
+        {
+            triggeredObjects.Clear();
+            triggeredObjects = new List<GameObject> ();
+        }
 
         //public virtual void DisableColliders(GameObject obj)
         //{

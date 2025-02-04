@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Foodrush
 {
-    public class BombScript : MonoBehaviour
+    public class BombScript : ObstacleScript
     {
         public ObstacleType type;
-        [SerializeField] private GameObject player;          // Reference to the player object
-        [SerializeField] private float blastDelay = 0.5f;    // Delay before the explosion
+        //[SerializeField] private GameObject player;          // Reference to the player object
+        [SerializeField] private float blastDelay = 0f;    // Delay before the explosion
         [SerializeField] private List<GameObject> collidingObjects = new List<GameObject>(); // To track colliding objects
                                                                                              //[SerializeField] private ParticleSystem explosionEffect; // Optional explosion effect
 
@@ -17,11 +17,13 @@ namespace Foodrush
             if (other.CompareTag("Runner"))
             {
                 // Add the player object to the list of colliding objects
-                if (!collidingObjects.Contains(other.gameObject))
-                {
-                    collidingObjects.Add(other.gameObject);
-                }
+                //if (!collidingObjects.Contains(other.gameObject))
+                //{
+                //    collidingObjects.Add(other.gameObject);
+                //}
                 Debug.Log(collidingObjects.Count + " is colliding count");
+
+                GetActiveObjectsCount(other.gameObject);
 
                 // Start the explosion process only if it hasn't started
                 if (!IsInvoking(nameof(Explode)))
@@ -33,11 +35,7 @@ namespace Foodrush
 
         private void TriggerExplosion()
         {
-            // Play the explosion effect
-            //if (explosionEffect != null)
-            //{
-            //    Instantiate(explosionEffect, transform.position, Quaternion.identity);
-            //}
+          
 
             // Wait for the blast delay, then explode
             Invoke(nameof(Explode), blastDelay);
@@ -54,21 +52,12 @@ namespace Foodrush
                 {
                     obj.SetActive(false);
                     Debug.Log(obj.name + " is disabled");
-                    GameManager.instance.player.activeRunnersList.Remove(obj);
+                    player.activeRunnersList.Remove(obj);
                 }
             }
 
             // Clear the list of colliding objects
-            collidingObjects.Clear();
-
-            // Check if the game is over after disabling objects
-            //if (IsGameOver(player))
-            //{
-            //    Debug.Log("Game Over!");
-            //    GameManager.instance.isGameOver = true;
-            //    Time.timeScale = 0;
-            //    // Implement game-over logic here (e.g., show UI, restart, etc.)
-            //}
+           ClearTriggeredList();
 
             // Disable or destroy the bomb after the explosion
             gameObject.SetActive(false);

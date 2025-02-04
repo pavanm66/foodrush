@@ -38,12 +38,9 @@ namespace Foodrush
             }
         }
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            Initialise();
-        }
+      
 
-        private void Initialise()
+        public void Initialise()
         {
             Debug.Log(" here is initialise");
             if (settingsPanel != null) settingsPanel.SetActive(false);
@@ -153,9 +150,8 @@ namespace Foodrush
             //winOrLosePanel.SetActive(false);
             //startPanel.SetActive(true);
             levelsList[1].SetActive(true);
-            Initialise();
-            GameManager.instance.player.Initialize();
-            GameManager.instance.player.gameObject.SetActive(true);
+           GameManager.instance.InitializeGame();
+          //  GameManager.instance.player.gameObject.SetActive(true);
             yield return new WaitForSeconds(Time.deltaTime);
         }
 

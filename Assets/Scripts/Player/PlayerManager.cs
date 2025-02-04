@@ -24,11 +24,15 @@ namespace Foodrush.Player
         public CameraMovement maincamera;
         private Quaternion defaultRotation;
 
+        [SerializeField] private float dragThreshold = 0.1f;
+        private Vector3 initialMousePos;
+        private bool isDragging = false;
+
         private void Start()
         {
             defaultPosition = transform.position;
             defaultRotation = transform.rotation;
-            Initialize();
+            // Initialize();
         }
 
         void Update()
@@ -44,22 +48,34 @@ namespace Foodrush.Player
                 transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
 
                 // Drag to move along the x-axis
+                if (Input.GetMouseButtonDown(0))
+                {
+                    // Store the initial mouse position when clicked
+                    initialMousePos = Input.mousePosition;
+                    isDragging = false; // Reset dragging state
+                }
+
                 if (Input.GetMouseButton(0) && !GameManager.instance.isWinGame)
                 {
-                    // Get the mouse position in world space
-                    Vector3 mousePos = Input.mousePosition;
-                    mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z; // Maintain z-position
-                    Vector3 targetPos = Camera.main.ScreenToWorldPoint(mousePos);
+                    // Check if the mouse has moved beyond the threshold to start dragging
+                    if (!isDragging && Vector3.Distance(initialMousePos, Input.mousePosition) > dragThreshold)
+                    {
+                        isDragging = true;
+                    }
+                    else
+                    {
+                        isDragging = false;
+                    }
 
-                    // Restrict the x-axis movement to within the limits
-                    targetPos.x = Mathf.Clamp(targetPos.x, xLimits.x, xLimits.y);
-                    // Preserve y and z position of the object
-                    targetPos.y = transform.position.y;
-                    targetPos.z = transform.position.z;
+                    if (isDragging)
+                    {
+                        MovePlayer();
+                    }
+                }
 
-                    // Smoothly interpolate the player's position for drag effect
-                    transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
-
+                if (Input.GetMouseButtonUp(0))
+                {
+                    isDragging = false; // Stop dragging when mouse is released
                 }
 
                 if (!GameManager.instance.isWinGame)
@@ -69,7 +85,7 @@ namespace Foodrush.Player
                     {
                         Time.timeScale = 0;
                     }
-                   
+
                 }
                 else
                 {
@@ -126,12 +142,26 @@ namespace Foodrush.Player
                 //}
             }
         }
+        void MovePlayer()
+        {
+            // Get the mouse position in world space
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z; // Maintain z-position
+            Vector3 targetPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+            // Restrict the x-axis movement to within the limits
+            targetPos.x = Mathf.Clamp(targetPos.x, xLimits.x, xLimits.y);
+            // Preserve y and z position of the object
+            targetPos.y = transform.position.y;
+            targetPos.z = transform.position.z;
+
+            // Smoothly interpolate the player's position for drag effect
+            transform.position = Vector3.Lerp(transform.position, targetPos, dragSpeed * Time.deltaTime);
+        }
 
         public void Initialize()
         {
-            GameManager.instance.isGameOver = false;
-            GameManager.instance.isWinGame = false;
-            GameManager.instance.isCompletedGame = false;
+
             isPlayerReady = false;
             gameObject.transform.position = defaultPosition;
             gameObject.transform.rotation = defaultRotation;
@@ -219,12 +249,12 @@ namespace Foodrush.Player
             float hexRadius = activeRunners[0].GetComponentInChildren<SpriteRenderer>().bounds.size.x * spacingVariable; // Adjust for spacing
             Vector3[] hexOffsets = new Vector3[]
             {
-        new Vector3(0, 0, hexRadius),                     // Top
-        new Vector3(hexRadius * Mathf.Sqrt(3) / 2, 0, hexRadius / 2),  // Top-right
-        new Vector3(hexRadius * Mathf.Sqrt(3) / 2, 0, -hexRadius / 2), // Bottom-right
-        new Vector3(0, 0, -hexRadius),                   // Bottom
-        new Vector3(-hexRadius * Mathf.Sqrt(3) / 2, 0, -hexRadius / 2), // Bottom-left
-        new Vector3(-hexRadius * Mathf.Sqrt(3) / 2, 0, hexRadius / 2)   // Top-left
+             new Vector3(0, 0, hexRadius),                     // Top
+             new Vector3(hexRadius * Mathf.Sqrt(3) / 2, 0, hexRadius / 2),  // Top-right
+               new Vector3(hexRadius * Mathf.Sqrt(3) / 2, 0, -hexRadius / 2), // Bottom-right
+              new Vector3(0, 0, -hexRadius),                   // Bottom
+               new Vector3(-hexRadius * Mathf.Sqrt(3) / 2, 0, -hexRadius / 2), // Bottom-left
+             new Vector3(-hexRadius * Mathf.Sqrt(3) / 2, 0, hexRadius / 2)   // Top-left
             };
 
             // Check for empty slots around all active runners
@@ -331,11 +361,11 @@ namespace Foodrush.Player
                     else
                     {
                         activeRunnersList.Clear();
-                       
+
                         // Trigger game over events
                         Debug.LogError("Game Over");
-                       GameManager.instance.isGameOver = true;
-                        
+                        GameManager.instance.isGameOver = true;
+
                     }
                     break;
 
