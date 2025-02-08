@@ -48,6 +48,11 @@ namespace Foodrush
         {
             StartCoroutine(IRotateInArea());
         }
+        [SerializeField] private float radius = 5f;  // Desired radius of rotation
+        //[SerializeField] private float speed = 1f;   // Speed of rotation
+
+        private float angle = 0f;  // Angle to control movement
+
         IEnumerator IRotateInArea()
         {
             while (!GameManager.instance.isGameOver)

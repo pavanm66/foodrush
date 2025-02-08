@@ -23,7 +23,7 @@ namespace Foodrush
 
         [SerializeField] Image loadingImage;
         [SerializeField] GameObject loadingPanel;
-
+        [SerializeField] int levelCount = 0;
         [SerializeField] List<GameObject> levelsList;
         private bool isGamePaused;
         public bool IsGamePaused
@@ -49,18 +49,34 @@ namespace Foodrush
             if (pausePanel != null) pausePanel.SetActive(false);
             if (winOrLosePanel != null) winOrLosePanel.SetActive(false);
             StartCoroutine(IAnimateText());
-            if (!levelsList[1].activeSelf)
-                levelsList[0].SetActive(true);
-            else
+            //if (!levelsList[1].activeSelf)
+            //    levelsList[0].SetActive(true);
+            //else
+            //{
+            //    levelsList[0].SetActive(false);
+            //}
+            ActiveCurrentLevel();
+        }
+
+        void ActiveCurrentLevel()
+        {
+            for (int i = 0; i < levelsList.Count; i++)
             {
-                levelsList[0].SetActive(false);
+                if (levelCount == i)
+                {
+                    levelsList[levelCount].SetActive(true);
+                }
+                else
+                {
+                    levelsList[i].SetActive(false);
+                }
             }
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape)&&((!GameManager.instance.isWinGame&&!GameManager.instance.isCompletedGame)||!GameManager.instance.isGameOver))
             {
                 PauseGame();
             }
@@ -131,6 +147,8 @@ namespace Foodrush
         }
         public void LoadNextLevel()
         {
+            levelCount++;
+           
             StartCoroutine(ILoadNextLevel());
         }
         [SerializeField] float maxTime = 5f;
@@ -149,8 +167,9 @@ namespace Foodrush
             loadingPanel.SetActive(false);
             //winOrLosePanel.SetActive(false);
             //startPanel.SetActive(true);
-            levelsList[1].SetActive(true);
-           GameManager.instance.InitializeGame();
+            ActiveCurrentLevel();
+            //levelsList[levelCount].SetActive(true);
+            GameManager.instance.InitializeGame();
           //  GameManager.instance.player.gameObject.SetActive(true);
             yield return new WaitForSeconds(Time.deltaTime);
         }
