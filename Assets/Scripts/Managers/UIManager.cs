@@ -148,6 +148,11 @@ namespace Foodrush
         public void LoadNextLevel()
         {
             levelCount++;
+            if (levelCount > 4) {
+                levelCount = 0;
+                RetryLevel();
+                return;
+            }
            
             StartCoroutine(ILoadNextLevel());
         }
